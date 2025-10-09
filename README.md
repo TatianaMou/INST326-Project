@@ -1,11 +1,9 @@
-# Information Retrieval & Analysis Tool — Function Library (P01)
+# Medical Symptoms Information Retrieval & Analysis Tool — Function Library (P01)
+
 
 **Course:** INST326 • **Section:** 0201
 **Team:** Information Retrieval and Analysis Tool
 **Members:** Andrew Koster • Chimezia Okwosha • Darren Esangbedo • Tatiana Moubray
-
-# Overview
-
 
 
 ## Features
