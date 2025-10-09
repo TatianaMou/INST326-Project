@@ -4,15 +4,8 @@
 **Team:** Information Retrieval and Analysis Tool
 **Members:** Andrew Koster • Chimezia Okwosha • Darren Esangbedo • Tatiana Moubray
 
-## Overview
-This library provides core functions for an Information Retrieval & Analysis Tool that helps students and researchers:
-- Search notes, assignments, and question banks by keyword, symptom, or subject.
-- Filter results by year or subject.
-- Rank results with a simple relevance score.
-- Track and display most searched queries for analytics.
+# Overview
 
-
-These functions form the foundation for future object-oriented development in Project 02.
 
 
 ## Features
@@ -23,7 +16,8 @@ These functions form the foundation for future object-oriented development in Pr
 - Analytics: frequency tracking and top queries
 
 
-## Installation
+## Installation and Setup Instructions
+This code was created in Google Colab.
 ```bash
 python -m venv .venv
 source .venv/bin/activate # Linux/Mac
