@@ -87,3 +87,8 @@ Contribution Guidelines
 Each team member completed four functions: one simple, one medium, one complex, and one of their choice.  
 All contributions were committed via branches and reviewed through pull requests.  
 Consistent PEP 8 style and detailed docstrings were required for every function.  
+
+The original development and testing for this project was done in Google Colab.  
+For transparency, the notebook is included here:
+
+- `/Project_01_Functions.ipynb` (authoritative development log)
