@@ -29,15 +29,15 @@ This project was developed using Python 3 (tested in Google Colab).
 All example data and test calls are contained within the notebook and demo script.
 
 To run locally:  
-# 1. Create a virtual environment  
+1. Create a Virutal Environment
 python -m venv .venv  
 source .venv/bin/activate        # Mac/Linux  
 .venv\Scripts\activate           # Windows  
 
-# 2. Install requirements (no external dependencies)  
+2. Install requirements (no external dependencies)  
 pip install -r requirements.txt  
 
-# 3. Run the demo script  
+3. Run the demo script 
 python examples/demo_script.py  
 
 If you’re using Google Colab, simply open the notebook version and run each cell to test the functions.
@@ -49,16 +49,16 @@ Example of how to import and run the function library:
 
 from src.library_name import *  
 
-# Knowledge base for testing  
+Knowledge base for testing  
 kb = {"Influenza": {"symptoms": ["fever", "cough", "fatigue"]}}  
 
-# Parse and process symptoms  
+Parse and process symptoms  
 symptoms = parse_symptom_list("fever, cough")  
 
-# Build a sample patient query  
+Build a sample patient query 
 query = build_patient_query("P001", "Ada", "Lovelace", "2000-01-01", "fever, cough", "moderate", 3, ["penicillin"])  
 
-# Rank conditions  
+Rank conditions  
 ranked = rank_conditions_basic(symptoms, kb)  
 print(ranked)  
 
