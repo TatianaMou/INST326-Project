@@ -20,6 +20,15 @@ The domain focus is the medical field. Students often struggle to interpret thei
 ## Installation and Setup Instructions
 This code was created in Google Colab. All of the test functions have the necessary data available in the cells to easily run and see an example of how they work.
 
+## Usage Examples
+
+
+## Function Library Overview and Organization
+
+
+## Contribution Guidelines
+Each team member is required to complete four functions: one simple, one medium, one complex, and one of their choice.
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate # Linux/Mac
