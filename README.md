@@ -4,8 +4,10 @@
 ### **Course:** INST326
 #### **Section:** 0201
 ### **Team:** Information Retrieval and Analysis Tool
-### **Members:** Andrew Koster • Chimezia Okwosha • Darren Esangbedo • Tatiana Moubray
+### **Members:** Andrew Koster [Project Manager and Lead Developer] • Chimezia Okwosha [Data Specalist] • Darren Esangbedo [UI/UX Designer] • Tatiana Moubray [Testing and Documentation Lead]
 
+## Domain Focus and Problem Statement
+The domain focus is the medical field. Students often struggle to interpret their symptoms and determine whether they need professional help.
 
 ## Features
 - Text cleaning & normalization
@@ -16,7 +18,8 @@
 
 
 ## Installation and Setup Instructions
-This code was created in Google Colab.
+This code was created in Google Colab. All of the test functions have the necessary data available in the cells to easily run and see an example of how they work.
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate # Linux/Mac
