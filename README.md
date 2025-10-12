@@ -7,10 +7,10 @@
 ### **Members:** Andrew Koster [Project Manager and Lead Developer] • Chimezia Okwosha [Data Specalist] • Darren Esangbedo [UI/UX Designer] • Tatiana Moubray [Testing and Documentation Lead]
 
 ## Domain Focus and Problem Statement
-The domain focus is the medical field. Students often struggle to interpret their symptoms and determine whether they need professional help.
+The domain focus is the medical field. Students often struggle to interpret their symptoms and determine whether they need professional help. We created functions that would allow patients and doctors to register their information and then be given back possible conditions they have, ranking the severity and providing feedback on when it is important to go see a doctor.
 
 ## Installation and Setup Instructions
-This code was created in Google Colab. All of the test functions have the necessary data available in the cells to easily run and see an example of how they work. We created functions that would allow patients and doctors to register their information and then be given back possible conditions they have, ranking the severity and providing feedback on when it is important to go see a doctor.
+This code was created in Google Colab. All of the test functions have the necessary data available in the cells to easily run and see an example of how they work.
 
 ## Usage Examples
 
