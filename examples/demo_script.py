@@ -153,9 +153,24 @@ print(" PREVENTION TIPS")
 print("=======================================================\n")
 for t in tips:
     print("-", t)
-
 # ----------------------------------------------------
 # End of Demo
 # ----------------------------------------------------
 print("\nDemo complete. All core functions have been successfully demonstrated.")
+
+```python
+from src.library_name import build_patient_query, rank_conditions_basic, list_functions
+
+if __name__ == "__main__":
+    # Example 1: Build query and rank
+    kb = {"Influenza": {"symptoms": ["fever", "cough", "fatigue"]}}
+    query = build_patient_query("P001", "Ada", "Lovelace", "2000-01-01", "fever, cough", "moderate", 3, [])
+    results = rank_conditions_basic(query["symptoms"], kb)
+    print("Patient Query:", query)
+    print("Top Condition Match:", results[0] if results else None)
+
+    # Example 2: Show function complexity catalog
+    print("\nFunction Catalog (Complex):")
+    for name, complexity, module in list_functions("Complex"):
+        print(f"- {name} ({complexity}, from {module})")
 
