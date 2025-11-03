@@ -7,104 +7,81 @@ This file summarizes each class, its constructor parameters, properties, and key
 ## Class: Patient
 **Purpose:** Represents a student or patient profile.
 
-**Constructor**
-```python
+**Constructor:**
 Patient(patientid, firstname, lastname, dob, weight_kg=None, height_m=None)
-Key Properties
 
-patientid, firstname, lastname, dob
+**Key Properties**
+- patientid, firstname, lastname, dob  
+- symptoms, allergies, severity, duration_days  
+- weight_kg, height_m  
 
-symptoms, allergies, severity, duration_days
+**Methods**
+- add_symptom_text(text) – Parse and store symptoms.  
+- add_allergies(items) – Add allergies from a list.  
+- age(today) – Calculate approximate age.  
+- bmi() – Return BMI if height and weight available.  
+- to_query() – Build dictionary query for searches.  
+- summary() – Generate readable patient summary.  
 
-weight_kg, height_m
+---
 
-Methods
+## Class: Doctor
+**Purpose:** Represents a doctor.
 
-add_symptom_text(text) – Parse and store symptoms.
-
-add_allergies(items) – Add allergies from a list.
-
-age(today) – Calculate approximate age.
-
-bmi() – Return BMI if height and weight available.
-
-to_query() – Build dictionary query for searches.
-
-summary() – Generate readable patient summary.
-
-Class: Doctor
-Purpose: Represents a doctor.
-
-Constructor
-
-python
-Copy code
+**Constructor:**
 Doctor(doctorid, docfirstname, doclastname)
-Properties
 
-doctorid, docfirstname, doclastname
+**Properties**
+- doctorid, docfirstname, doclastname  
 
-Methods
+**Methods**
+- full_name() – Return "Firstname Lastname".  
+- Standard __str__() and __repr__() for readable output.  
 
-full_name() – Return "Firstname Lastname".
+---
 
-Standard __str__() and __repr__() for readable output.
+## Class: ConditionSearch
+**Purpose:** Performs ranking and formatting of possible conditions.
 
-Class: ConditionSearch
-Purpose: Performs ranking and formatting of possible conditions.
-
-Constructor
-
-python
-Copy code
+**Constructor:**
 ConditionSearch(knowledge_base=None)
-Methods
 
-rank(symptoms, top_n=5) – Return ranked list of conditions.
+**Methods**
+- rank(symptoms, top_n=5) – Return ranked list of conditions.  
+- as_cards(ranked_items) – Format ranked results for display.  
+- search_notes(query_terms, docs, top_n=5) – Keyword search across notes.  
 
-as_cards(ranked_items) – Format ranked results for display.
+---
 
-search_notes(query_terms, docs, top_n=5) – Keyword search across notes.
+## Class: AlertSystem
+**Purpose:** Checks for medical red-flags and allergy conflicts.
 
-Class: AlertSystem
-Purpose: Checks for medical red-flags and allergy conflicts.
-
-Constructor
-
-python
-Copy code
+**Constructor:**
 AlertSystem(alerts_rules=None)
-Methods
 
-check(symptoms, duration_days, severity) – Return list of alert messages.
+**Methods**
+- check(symptoms, duration_days, severity) – Return list of alert messages.  
+- allergy_conflict(allergies, medications) – True if overlap found.  
+- update_rules(new_rules) – Replace internal rule dictionary.  
 
-allergy_conflict(allergies, medications) – True if overlap found.
+---
 
-update_rules(new_rules) – Replace internal rule dictionary.
+## Class: RecordsManager
+**Purpose:** Manage stored patient records and query logs.
 
-Class: RecordsManager
-Purpose: Manage stored patient records and query logs.
-
-Constructor
-
-python
-Copy code
+**Constructor:**
 RecordsManager()
-Methods
 
-add_record(record_dict) – Append new record.
+**Methods**
+- add_record(record_dict) – Append new record.  
+- search(keyword) – Search across records.  
+- log_query(query) – Add to search log.  
+- top_queries() – Return most frequent queries.  
+- condition_counts(conditions) – Summarize condition frequencies.  
 
-search(keyword) – Search across records.
+---
 
-log_query(query) – Add to search log.
-
-top_queries() – Return most frequent queries.
-
-condition_counts(conditions) – Summarize condition frequencies.
-
-Example Usage
-python
-Copy code
+## Example Usage
 from src.patient import Patient
 from src.condition_search import ConditionSearch
 from src.alert_system import AlertSystem
