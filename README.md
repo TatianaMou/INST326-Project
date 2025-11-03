@@ -1,4 +1,4 @@
-Medical Symptoms Information Retrieval & Analysis Tool — Function Library (P01)
+Medical Symptoms Information Retrieval & Analysis Tool — Function Library
 
 Course: INST326  
 Section: 0201  
