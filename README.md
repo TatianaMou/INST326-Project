@@ -84,7 +84,8 @@ Supporting materials:
 ------------------------------------------------------------
 
 Medical Staff Hierarchy
-classDiagram
+
+    classDiagram
     class MedicalStaff {
         <<abstract>>
         - staff_id
@@ -122,7 +123,7 @@ classDiagram
     Doctor <|-- Surgeon
     HospitalDepartment o-- MedicalStaff
 
-classDiagram
+    classDiagram
     class PatientProfile {
         <<abstract>>
         + follow_up_window_days()* 
@@ -135,7 +136,8 @@ classDiagram
     GeriatricPatient <|-- PatientProfile
 
 Patient Domain Hierarchy
-    class Registry {
+    
+     class Registry {
         - patients : Dict
         + add()
         + get()
