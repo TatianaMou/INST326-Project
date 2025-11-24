@@ -1,6 +1,7 @@
 
 Patient Profile Hierarchy
-PatientProfile (ABC)
+
+``PatientProfile (ABC)
  ├── PediatricPatient
  ├── AdultPatient
- └── GeriatricPatient
+ └── GeriatricPatient``
