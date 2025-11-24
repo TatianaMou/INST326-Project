@@ -1,4 +1,4 @@
-**Medical Staff Hierarchy**
+Medical Staff Hierarchy
 classDiagram
     class MedicalStaff {
         <<abstract>>
@@ -49,7 +49,7 @@ classDiagram
     AdultPatient <|-- PatientProfile
     GeriatricPatient <|-- PatientProfile
 
-**Patient Domain Hierarchy**
+Patient Domain Hierarchy
     class Registry {
         - patients : Dict
         + add()
