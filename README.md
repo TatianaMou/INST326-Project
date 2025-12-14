@@ -174,6 +174,17 @@ Patient Domain Hierarchy
 
 ------------------------------------------------------------
 
+Usage Guide
+This application allows users to analyze possible conditions based on reported symptoms. Users can import datasets, enter symptoms, run analyses, and persist system state between sessions.
+
+Basic Workflow
+1. Import or load a dataset of conditions and symptoms
+2. Enter one or more symptoms
+3. Run the analysis to identify matching conditions
+4. Save results or export the summaries
+
+------------------------------------------------------------
+
 Contribution Guidelines  
 Each team member completed four functions: one simple, one medium, one complex, and one of their choice.  
 All contributions were committed via branches and reviewed through pull requests.  
