@@ -1,0 +1,31 @@
+import unittest
+import tempfile
+from pathlib import Path
+
+from src.data_retriever import DataRetriever
+
+class TestDataRetriever(unittest.TestCase):
+    def test_load_csv_success(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / "kb.csv"
+            p.write_text(
+                "condition,symptoms,self_care,seek_care\n"
+                'Influenza,"fever,cough","Rest","If breathing issues"\n',
+                encoding="utf-8",
+            )
+            r = DataRetriever()
+            kb = r.load_knowledge_base(p)
+            self.assertIn("Influenza", kb)
+            self.assertIn("fever", kb["Influenza"]["symptoms"])
+            self.assertEqual(kb["Influenza"]["self_care"], "Rest")
+
+    def test_unsupported_extension_raises(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / "kb.txt"
+            p.write_text("hello", encoding="utf-8")
+            r = DataRetriever()
+            with self.assertRaises(ValueError):
+                r.load_knowledge_base(p)
+
+if __name__ == "__main__":
+    unittest.main()
