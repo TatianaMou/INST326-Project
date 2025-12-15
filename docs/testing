@@ -1,0 +1,21 @@
+# Testing Strategy
+
+## Goals
+Ensure correctness of individual components and verify the full workflow works end-to-end, including file I/O.
+
+## Test Types
+### Unit Tests
+- Validate individual classes and methods (Condition, Symptom, DataRetriever, Analyzer)
+
+### Integration Tests
+- Verify components work together:
+  - Import → convert → analyze → export
+
+### System Tests
+- Verify complete workflow end-to-end:
+  - Import → analyze → export → save → load
+
+## Running Tests
+From the repo root:
+```bash
+python -m unittest discover -s tests -p "test_*.py"
