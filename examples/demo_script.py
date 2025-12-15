@@ -1,176 +1,52 @@
-"""
-=======================================================
- Health Information Retrieval Tool — Demo Script
-=======================================================
+from pathlib import Path
 
-This script demonstrates how to use our function library
-for the "Student Symptom Self-Diagnosis" project.
+from src.importer import import_data
+from src.utils import kb_to_conditions
+from src.symptom import parse_symptoms
+from src.analyzer import Analyzer
+from src.io_export import export_results_json, export_results_txt
+from src.persistence import save_state, load_state
 
-It shows:
-- Parsing user symptom input
-- Building a patient query
-- Ranking likely conditions
-- Showing red flag alerts
-- Searching patient records
-- Tracking search history
-- Displaying summaries and statistics
-"""
 
-# ----------------------------------------------------
-# Import functions from the library (adjust path as needed)
-# ----------------------------------------------------
-from src.irlib import (
-    parse_symptom_list,
-    build_patient_query,
-    rank_conditions_basic,
-    red_flag_alerts,
-    generate_patient_summary,
-    search_patient_records,
-    log_search_activity,
-    summarize_condition_stats,
-    suggest_prevention_tips
-)
+def main() -> None:
+    # 1) Create a tiny dataset on the fly (CSV)
+    demo_dir = Path("demo_out")
+    demo_dir.mkdir(exist_ok=True)
+    csv_path = demo_dir / "kb.csv"
+    csv_path.write_text(
+        "condition,symptoms,self_care,seek_care\n"
+        'Influenza,"fever,cough,fatigue","Rest + fluids","Seek care if breathing issues"\n'
+        'Common Cold,"cough,congestion,sore throat","Hydrate + rest","Seek care if severe or >7 days"\n',
+        encoding="utf-8",
+    )
 
-# ----------------------------------------------------
-# Step 1. Example Knowledge Base and Rules
-# ----------------------------------------------------
-knowledge_base = {
-    "Influenza": {
-        "symptoms": ["fever", "cough", "fatigue", "sore throat"],
-        "self_care": "Rest, fluids, and over-the-counter medicine.",
-        "seek_care": "If fever lasts more than 3 days or breathing problems occur."
-    },
-    "Common Cold": {
-        "symptoms": ["cough", "sore throat", "congestion"],
-        "self_care": "Stay hydrated and get enough sleep.",
-        "seek_care": "If symptoms persist for more than a week."
-    },
-    "Migraine": {
-        "symptoms": ["headache", "nausea", "light sensitivity"],
-        "self_care": "Rest in a dark room and avoid loud noise."
-    }
-}
+    # 2) Import dataset
+    result = import_data(csv_path)
+    print(result.message)
+    if result.errors:
+        print("Non-fatal import issues:", result.errors[:3])
+    if not result.ok or result.data is None:
+        raise RuntimeError("Demo stopped: import failed.")
 
-alerts_rules = {
-    "keywords": ["chest pain", "shortness of breath"],
-    "long_duration_days": 3,
-    "high_fever_keyword": "fever",
-    "high_fever_threshold_days": 3
-}
+    # 3) Analyze symptoms
+    kb = result.data
+    conditions = kb_to_conditions(kb)
+    user_symptoms = parse_symptoms("fever, cough")
+    analyzer = Analyzer(conditions)
+    analysis = analyzer.analyze(user_symptoms, top_n=2)
+    print("Top results:", [r["condition"] for r in analysis["ranked_conditions"]])
 
-# ----------------------------------------------------
-# Step 2. Simulated Patient Input
-# ----------------------------------------------------
-symptom_text = "Fever, cough"
-symptoms = parse_symptom_list(symptom_text)
+    # 4) Export
+    json_report = export_results_json(analysis, demo_dir / "report.json")
+    txt_report = export_results_txt(analysis, demo_dir / "report.txt")
+    print("Exported:", json_report, txt_report)
 
-patient_query = build_patient_query(
-    patientid="P001",
-    firstname="Ada",
-    lastname="Lovelace",
-    dob="2000-01-01",
-    symptom_text=symptom_text,
-    severity="moderate",
-    duration_days=4,
-    allergies=["penicillin"]
-)
+    # 5) Save + Load state
+    state_path = save_state(demo_dir / "state.json", user_symptoms, conditions)
+    loaded_symptoms, loaded_conditions = load_state(state_path)
+    print("Reloaded symptoms:", [s.name for s in loaded_symptoms])
+    print("Reloaded conditions:", len(loaded_conditions))
 
-# ----------------------------------------------------
-# Step 3. Rank Conditions
-# ----------------------------------------------------
-ranked = rank_conditions_basic(symptoms, knowledge_base, top_n=3)
-
-# ----------------------------------------------------
-# Step 4. Generate Alerts
-# ----------------------------------------------------
-alerts = red_flag_alerts(symptoms, 4, "moderate", alerts_rules)
-
-# ----------------------------------------------------
-# Step 5. Display Results
-# ----------------------------------------------------
-print("\n=======================================================")
-print(" PATIENT SUMMARY")
-print("=======================================================\n")
-print(generate_patient_summary(patient_query))
-print()
-
-print("=======================================================")
-print(" CONDITION RANKING RESULTS")
-print("=======================================================\n")
-for item in ranked:
-    print(f"{item['condition']} - Score: {round(item['score'],2)}")
-    print("Matched:", ", ".join(item["matched"]))
-    print("Explanation:", item["explanation"])
-    print()
-
-print("=======================================================")
-print(" ALERT MESSAGES")
-print("=======================================================\n")
-if len(alerts) == 0:
-    print("No red-flag alerts detected.")
-else:
-    for alert in alerts:
-        print("-", alert)
-print()
-
-# ----------------------------------------------------
-# Step 6. Search Records & Track Activity
-# ----------------------------------------------------
-records = [
-    {"firstname": "Ada", "lastname": "Lovelace", "notes": "Fever and cough"},
-    {"firstname": "Alan", "lastname": "Turing", "notes": "Headache and fatigue"}
-]
-search_results = search_patient_records(records, "fever")
-
-print("=======================================================")
-print(" PATIENT RECORD SEARCH")
-print("=======================================================\n")
-for result in search_results:
-    print(result)
-print()
-
-log_list = ["fever", "cold"]
-log_list = log_search_activity(log_list, "cough")
-
-print("Search Log:", log_list)
-print()
-
-# ----------------------------------------------------
-# Step 7. Condition Statistics & Prevention Tips
-# ----------------------------------------------------
-conditions = ["influenza", "cold", "influenza"]
-stats = summarize_condition_stats(conditions)
-print("Condition Counts:", stats)
-
-rules = {
-    "cough": ["cover your mouth when coughing", "stay hydrated"],
-    "fever": ["wash your hands often", "avoid close contact"]
-}
-tips = suggest_prevention_tips(symptoms, rules)
-
-print("\n=======================================================")
-print(" PREVENTION TIPS")
-print("=======================================================\n")
-for t in tips:
-    print("-", t)
-# ----------------------------------------------------
-# End of Demo
-# ----------------------------------------------------
-print("\nDemo complete. All core functions have been successfully demonstrated.")
-
-```python
-from src.library_name import build_patient_query, rank_conditions_basic, list_functions
 
 if __name__ == "__main__":
-    # Example 1: Build query and rank
-    kb = {"Influenza": {"symptoms": ["fever", "cough", "fatigue"]}}
-    query = build_patient_query("P001", "Ada", "Lovelace", "2000-01-01", "fever, cough", "moderate", 3, [])
-    results = rank_conditions_basic(query["symptoms"], kb)
-    print("Patient Query:", query)
-    print("Top Condition Match:", results[0] if results else None)
-
-    # Example 2: Show function complexity catalog
-    print("\nFunction Catalog (Complex):")
-    for name, complexity, module in list_functions("Complex"):
-        print(f"- {name} ({complexity}, from {module})")
-
+    main()
