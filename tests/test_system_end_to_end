@@ -1,0 +1,46 @@
+import unittest
+import tempfile
+from pathlib import Path
+
+from src.importer import import_data
+from src.utils import kb_to_conditions
+from src.symptom import parse_symptoms
+from src.analyzer import Analyzer
+from src.io_export import export_results_json
+from src.persistence import save_state, load_state
+
+class TestSystemEndToEnd(unittest.TestCase):
+    def test_full_workflow_with_persistence(self):
+        with tempfile.TemporaryDirectory() as d:
+            dpath = Path(d)
+
+            csv_path = dpath / "kb.csv"
+            csv_path.write_text(
+                "condition,symptoms,self_care,seek_care\n"
+                'Influenza,"fever,cough,fatigue","Rest","If breathing issues"\n'
+                'Cold,"cough,congestion","Hydrate","If severe"\n',
+                encoding="utf-8",
+            )
+
+            imp = import_data(csv_path)
+            self.assertTrue(imp.ok)
+            self.assertIsNotNone(imp.data)
+
+            conditions = kb_to_conditions(imp.data)
+            symptoms = parse_symptoms("fever, cough")
+
+            analyzer = Analyzer(conditions)
+            analysis = analyzer.analyze(symptoms, top_n=2)
+            self.assertGreaterEqual(len(analysis["ranked_conditions"]), 1)
+
+            out = export_results_json(analysis, dpath / "report.json")
+            self.assertTrue(out.exists())
+
+            state_file = save_state(dpath / "state.json", symptoms, conditions)
+            loaded_symptoms, loaded_conditions = load_state(state_file)
+
+            self.assertEqual([s.name for s in loaded_symptoms], ["fever", "cough"])
+            self.assertEqual(len(loaded_conditions), len(conditions))
+
+if __name__ == "__main__":
+    unittest.main()
