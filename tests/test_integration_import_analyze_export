@@ -1,0 +1,43 @@
+import unittest
+import tempfile
+from pathlib import Path
+import json
+
+from src.importer import import_data
+from src.utils import kb_to_conditions
+from src.symptom import parse_symptoms
+from src.analyzer import Analyzer
+from src.io_export import export_results_json, export_results_txt
+
+class TestIntegrationImportAnalyzeExport(unittest.TestCase):
+    def test_import_analyze_export(self):
+        with tempfile.TemporaryDirectory() as d:
+            dpath = Path(d)
+            csv_path = dpath / "kb.csv"
+            csv_path.write_text(
+                "condition,symptoms,self_care,seek_care\n"
+                'Influenza,"fever,cough,fatigue","Rest","If breathing issues"\n'
+                'Cold,"cough,congestion","Hydrate","If severe"\n',
+                encoding="utf-8",
+            )
+
+            result = import_data(csv_path)
+            self.assertTrue(result.ok)
+            self.assertIsNotNone(result.data)
+
+            conditions = kb_to_conditions(result.data)
+            analyzer = Analyzer(conditions)
+            symptoms = parse_symptoms("fever, cough")
+            analysis = analyzer.analyze(symptoms, top_n=2)
+
+            out_json = export_results_json(analysis, dpath / "report.json")
+            out_txt = export_results_txt(analysis, dpath / "report.txt")
+
+            self.assertTrue(out_json.exists())
+            self.assertTrue(out_txt.exists())
+
+            parsed = json.loads(out_json.read_text(encoding="utf-8"))
+            self.assertIn("ranked_conditions", parsed)
+
+if __name__ == "__main__":
+    unittest.main()
