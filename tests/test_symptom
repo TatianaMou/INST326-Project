@@ -1,0 +1,25 @@
+import unittest
+from src.symptom import Symptom, parse_symptoms
+
+class TestSymptom(unittest.TestCase):
+    def test_symptom_normalization(self):
+        s = Symptom(" Fever ")
+        self.assertEqual(s.name, "fever")
+        self.assertEqual(s.severity, 1)
+
+    def test_symptom_severity_validation(self):
+        with self.assertRaises(ValueError):
+            Symptom("fever", severity=0)
+        with self.assertRaises(ValueError):
+            Symptom("fever", severity=6)
+
+    def test_parse_symptoms(self):
+        out = parse_symptoms("fever, cough,  fatigue ")
+        self.assertEqual([s.name for s in out], ["fever", "cough", "fatigue"])
+
+    def test_parse_symptoms_empty(self):
+        out = parse_symptoms("   ")
+        self.assertEqual(out, [])
+
+if __name__ == "__main__":
+    unittest.main()
