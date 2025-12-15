@@ -1,0 +1,27 @@
+import unittest
+from src.condition import Condition
+from src.analyzer import Analyzer
+from src.symptom import Symptom
+
+class TestAnalyzer(unittest.TestCase):
+    def setUp(self):
+        self.conditions = [
+            Condition("Influenza", ["fever", "cough", "fatigue"]),
+            Condition("Cold", ["cough", "congestion"]),
+        ]
+        self.analyzer = Analyzer(self.conditions)
+
+    def test_analyze_with_strings(self):
+        res = self.analyzer.analyze(["fever", "cough"], top_n=1)
+        self.assertEqual(res["ranked_conditions"][0]["condition"], "Influenza")
+
+    def test_analyze_with_symptom_objects(self):
+        res = self.analyzer.analyze([Symptom("FEVER"), Symptom("cough")], top_n=2)
+        self.assertEqual(res["ranked_conditions"][0]["condition"], "Influenza")
+
+    def test_analyze_empty(self):
+        res = self.analyzer.analyze([])
+        self.assertEqual(res["ranked_conditions"], [])
+
+if __name__ == "__main__":
+    unittest.main()
