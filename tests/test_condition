@@ -1,0 +1,21 @@
+import unittest
+from src.condition import Condition
+
+class TestCondition(unittest.TestCase):
+    def test_matches_symptom_case_and_space(self):
+        c = Condition(name="Influenza", symptom_keywords=["fever", "cough"])
+        self.assertTrue(c.matches_symptom(" Fever "))
+        self.assertTrue(c.matches_symptom("COUGH"))
+        self.assertFalse(c.matches_symptom("headache"))
+
+    def test_to_from_dict_roundtrip(self):
+        c1 = Condition(name="Cold", symptom_keywords=["cough"], description="Hydrate", severity="low")
+        d = c1.to_dict()
+        c2 = Condition.from_dict(d)
+        self.assertEqual(c2.name, "Cold")
+        self.assertIn("cough", c2.symptom_keywords)
+        self.assertEqual(c2.description, "Hydrate")
+        self.assertEqual(c2.severity, "low")
+
+if __name__ == "__main__":
+    unittest.main()
