@@ -21,6 +21,9 @@ and persistence (save/load) between sessions.
 - Save/load program state
 - Comprehensive tests (unit, integration, system)
 
+## Video Presentation
+https://drive.google.com/file/d/1mYT78v5Pi1QpbeyKIqPfbJqKH8ZXwQii/view?usp=sharing
+
 ## Repository Structure
 - `src/` Core application modules
 - `tests/` Unit, integration, and system tests
